@@ -7,6 +7,8 @@ output_yaml:
 
 <!-- EC: Test! -->
 
+<!-- Test 2! -->
+
 <!-- EC: There are 2 moderndive datasets and the parallel slopes function from the `moderndive` package that are used extensively in this chapter. Does the `moderndive` removal affect just datasets, or functions as well? -->
 
 <!-- EC: Dataset replacement proposals
