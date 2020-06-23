@@ -116,15 +116,6 @@ earnings %>%
 
 We can see that there were 64 male subjects and 51 female subjects. The mean age of the subjects was 42.4 years old, with a roughly even age distribution save for the oldest group. The average income is $141,813, which is exceptionally high for the United States. Let's keep in mind the environmental context of the study - a wealthy, predominantly white town in the Northeast. 
 
-Now that we've looked at the raw values in our `earnings` data frame and got a sense of the data, let's compute summary statistics. As done before, let's use the `skim()` function from **skimr**.
-
-```{r fig.cap="Observe that we have no missing data, that there are 115 subjects total, and that the average age is 42.4."}
-earnings %>% 
-  skim()
-```
-
-We can see that there were 64 male subjects and 51 female subjects. The mean age of the subjects was 42.4 years old, with a roughly even age distribution save for the oldest group. The average income is $141,813, which is exceptionally high. Let's keep in mind the environmental context of the study - a wealthy, predominantly white town in the Northeast. 
-
 Now, let's compute the correlation coefficient between our two numerical variables: `income` and `age`. Recall that correlation coefficients only exist between numerical variables. We observe that they are "weakly positively" correlated.
 
 ```{r}
