@@ -5,8 +5,6 @@ output_yaml:
 
 # Continuous Response II {#multiple-regression}
 
-Test
-
 <!-- EC: Is it better to load all the libraries in the top chunk all at once? Or should I load whenever I use them (eg. loading PPBDS.data only when introducing that dataset) -->
 
 <!-- EC: The parallel slopes function from the `moderndive` package is used extensively in this chapter. Does the `moderndive` removal guideline only affect datasets, or functions as well? -->
