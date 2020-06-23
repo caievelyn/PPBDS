@@ -5,14 +5,18 @@ output_yaml:
 
 # Continuous Response II {#multiple-regression}
 
-<!-- EC: Test! -->
-
-<!-- EC: There are 2 moderndive datasets and the parallel slopes function from the `moderndive` package that are used extensively in this chapter. Does the `moderndive` removal affect just datasets, or functions as well? -->
+<!-- EC: The parallel slopes function from the `moderndive` package is used extensively in this chapter. Does the `moderndive` removal guideline only affect datasets, or functions as well? -->
 
 <!-- EC: Dataset replacement proposals
-UT Austin example: Qscores. I need another datset regressing on one numerical and one categorical variable, also the datasets are similar in that they analyze evaluation scores. 
-Credit card debt example: Use a dataset with one in which there is a numerical outcome variable and 2 numerical explanatory variables, don't know which one is most fitting
+UT Austin example: trains or sps. I need another dataset regressing on one numerical and one categorical variable, also the datasets are similar in that they analyze evaluation scores. 
+Credit card debt example: Scores. 1 numerical outcome variable and 2 numerical explanatory variables
 Seattle house prices example: trains or SPS. 1 numerical outcome, 1 numerical explanatory, 1 categorical explanatory. -->
+
+<!-- EC: Potential tutorial questions (to put into Gov-50/part_3 once that's forkable): -->
+<!-- **Interaction Effects** -->
+<!-- * Calculate for evaluation scores, regressing on age and gender and taking their interaction effects. -->
+<!-- * What is the "offset" for a 60-year-old male instructor? -->
+<!-- * How would you interpret the interaction effect between age and gender for male instructors? -->
 
 Earlier we introduced ideas related to modeling for explanation, in particular that the goal of modeling is to make explicit the relationship between some outcome variable $y$ and some explanatory variable $x$. While there are many approaches to modeling, we focused on one particular technique: *linear regression*, one of the most commonly used and easy-to-understand approaches to modeling. To keep things simple, we only considered models with one explanatory $x$ variable that was either numerical or categorical.
 
@@ -29,6 +33,7 @@ library(fivethirtyeight)
 library(gt)
 library(rsample)
 library(PPBDS.data)
+library(gapminder)
 ```
 ```{r, echo=FALSE, message=FALSE, warning=FALSE}
 library(tidyverse)
@@ -39,6 +44,7 @@ library(fivethirtyeight)
 library(gt)
 library(rsample)
 library(PPBDS.data)
+library(gapminder)
 ```
 
 ```{r, message=FALSE, warning=FALSE, echo=FALSE}
@@ -46,14 +52,11 @@ library(PPBDS.data)
 library(knitr)
 library(kableExtra)
 library(patchwork)
-library(gapminder)
 library(scales)
 ```
 
 
 ## Teaching evaluations revisited: one numerical and one categorical explanatory variable {#model4}
-
-<!-- EC: Check which dataset was used before in introducing regression on a numerical/categorical explanator variable? Presumably need to replace this dataset.-->
 
 Let's revisit the instructor evaluation data from UT Austin we analyzed previously. We studied the relationship between teaching evaluation scores as given by students and "beauty" scores. The variable teaching `score` was the numerical outcome variable $y$, and the variable "beauty" score (`bty_avg`) was the numerical explanatory $x$ variable. 
 
