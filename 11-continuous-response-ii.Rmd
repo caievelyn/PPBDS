@@ -30,10 +30,7 @@ library(gt)
 library(rsample)
 library(PPBDS.data)
 library(gapminder)
-<<<<<<< HEAD
 library(moderndive)
-=======
->>>>>>> master
 ```
 ```{r, echo=FALSE, message=FALSE, warning=FALSE}
 library(tidyverse)
@@ -45,10 +42,7 @@ library(gt)
 library(rsample)
 library(PPBDS.data)
 library(gapminder)
-<<<<<<< HEAD
 library(moderndive)
-=======
->>>>>>> master
 ```
 
 ```{r, message=FALSE, warning=FALSE, echo=FALSE}
@@ -92,10 +86,7 @@ glimpse(earnings)
 Let's also display a random sample of 5 rows of the data, with each row corresponding to a subject. Due to the random nature of the sampling, you will likely end up with a different subset of 5 rows. The `set.seed()` function allows you to "randomly" obtain the same 5 rows if you set the same number as the seed. In this case, we've set the seed to 1, arbitrarily. 
 
 ```{r, eval=FALSE}
-<<<<<<< HEAD
 set.seed(1)
-=======
->>>>>>> master
 earnings %>% 
   sample_n(size = 5)
 ```
@@ -114,7 +105,6 @@ Before we compute summary statistics, let's change the variable type of `gender`
 ```{r echo=FALSE}
 earnings <- earnings %>%
   mutate(gender = as.factor(gender))
-<<<<<<< HEAD
 ```
 
 Now that we've looked at the raw values in our `earnings` data frame and got a sense of the data, let's compute summary statistics. As done before, let's use the `skim()` function from **skimr**.
@@ -126,18 +116,15 @@ earnings %>%
 
 We can see that there were 64 male subjects and 51 female subjects. The mean age of the subjects was 42.4 years old, with a roughly even age distribution save for the oldest group. The average income is $141,813, which is exceptionally high for the United States. Let's keep in mind the environmental context of the study - a wealthy, predominantly white town in the Northeast. 
 
-=======
-```
-
 Now that we've looked at the raw values in our `earnings` data frame and got a sense of the data, let's compute summary statistics. As done before, let's use the `skim()` function from **skimr**.
 
 ```{r fig.cap="Observe that we have no missing data, that there are 115 subjects total, and that the average age is 42.4."}
 earnings %>% 
   skim()
 ```
-We can see that there were 64 male subjects and 51 female subjects. The mean age of the subjects was 42.4 years old, with a roughly even age distribution save for the oldest group. The average income is $141,813, which is exceptionally high. Let's keep in mind the environmental context of the study - a (known to be) wealthy, predominantly white town in the Northeast. 
 
->>>>>>> master
+We can see that there were 64 male subjects and 51 female subjects. The mean age of the subjects was 42.4 years old, with a roughly even age distribution save for the oldest group. The average income is $141,813, which is exceptionally high. Let's keep in mind the environmental context of the study - a wealthy, predominantly white town in the Northeast. 
+
 Now, let's compute the correlation coefficient between our two numerical variables: `income` and `age`. Recall that correlation coefficients only exist between numerical variables. We observe that they are "weakly positively" correlated.
 
 ```{r}
@@ -181,7 +168,7 @@ We notice some interesting trends. First, there is a wide range of income, with 
 
 Let's now quantify the relationship of our outcome variable $y$ and the two explanatory variables using one type of multiple regression model known as an *interaction model*. We'll explain where the term "interaction" comes from at the end of this section.
 
-In particular, we'll write out the equation of the two regression lines in Figure \@ref(fig:numxcatxplot1) using the values from a regression table. Before we do this, however, let's go over a brief refresher of regression when you have a categorical explanatory variable $x$. 
+In particular, we'll write out the equation of the two regression lines using the values from a regression table. Before we do this, however, let's go over a brief refresher of regression when you have a categorical explanatory variable $x$. 
 
 Recall this regression model for countries' life expectancies as a function of which continent the country was in. In other words, we had a numerical outcome variable $y$ = `lifeExp` and a categorical explanatory variable $x$ = `continent` which had 5 levels: `Africa`, `Americas`, `Asia`, `Europe`, and `Oceania`.
 
@@ -211,11 +198,7 @@ Going back to our multiple regression model for `income` using `age` and `gender
 ```{r, eval=FALSE}
 # Fit regression model:
 
-<<<<<<< HEAD
 earnings_model_interaction <- lm(income ~ age * gender, data = earnings)
-=======
-score_model_interaction <- lm(score ~ age * gender, data = earnings)
->>>>>>> master
 
 # Get regression table:
 
@@ -224,16 +207,11 @@ earnings_model_interaction %>%
   select(term, estimate, conf.low, conf.high)
 ```
 ```{r echo=FALSE}
-<<<<<<< HEAD
 
 # Calculate regression and select for useful variables
 
 earnings_model_interaction <- lm(income ~ age * gender, data = earnings)
 x <- tidy(earnings_model_interaction,
-=======
-score_model_interaction <- lm(score ~ age * gender, data = earnings)
-tidy(score_model_interaction,
->>>>>>> master
      conf.int = TRUE) %>% 
   select(term, estimate, conf.low, conf.high)
 
@@ -351,7 +329,7 @@ Let's put this all together and compute the fitted value $\widehat{y} = \widehat
 
 $$
 \begin{aligned}
-\widehat{y} = \widehat{\text{score}} &= 131906 - 128	\cdot \text{age} - 0.446 \cdot 0 + 0.014 \cdot \text{age} \cdot 0\\
+\widehat{y} = \widehat{\text{score}} &= 131906 - 128	\cdot \text{age} - 0.446 \cdot 0 + 1671 \cdot \text{age} \cdot 0\\
 &= 131906 - 128	\cdot \text{age} - 0 + 0\\
 &= 131906 - 128	\cdot \text{age}\\
 \end{aligned}
@@ -362,7 +340,7 @@ which is the equation of the red regression line corresponding to the female sub
 $$
 \begin{aligned}
 \widehat{y} = \widehat{\text{score}} &= 131906 - 128	\cdot \text{age} - 45119 + 1671 \cdot \text{age}\\
-&= (131906 - 128) + (- 0.018 + 0.014) * \text{age}\\
+&= (131906 - 128) + (- 128 + 1671) * \text{age}\\
 &= 131906 + 1544	\cdot \text{age}\\
 \end{aligned}
 $$
@@ -444,11 +422,7 @@ But that still does not give us an estimate of the uncertainty around that inter
 Thankfully, there is an easy way to get that using `lm()` and `tidy()`.  Recall that our coefficient on `gendermale` reflects the effect for subjects whose age is 0.  If we *recenter* age so 0 is equal to the age we are interested in, then we can use both the coefficient and confidence inteveral around `gendermale` to get the confidence interval for that age.  For example, here is how we would get the coefficient and confidence interval for subjects whose age is 30:
 
 ```{r}
-<<<<<<< HEAD
 lm(income ~ I(age - 30) * gender, data = earnings) %>%
-=======
-lm(score ~ I(age - 30) * gender, data = earnings) %>%
->>>>>>> master
   tidy(conf.int = TRUE) %>%
   filter(term == "gendermale") %>%
   select(term, estimate, conf.low, conf.high)
@@ -463,12 +437,7 @@ But there's no reason to do this just for one age.  We can use `map_*` functions
 gendermale_coefs <- tibble(ages = 20:90) %>%
   
   # First, we get our regression results for each age:
-  
-<<<<<<< HEAD
   mutate(mod = map(ages, ~ lm(income ~ I(age - .) * gender, data = earnings)),
-=======
-  mutate(mod = map(ages, ~ lm(score ~ I(age - .) * gender, data = earnings)),
->>>>>>> master
          reg_results = map(mod, ~ tidy(., conf.int = TRUE)),
          
          # We only care about the term "gendermale":
@@ -541,28 +510,19 @@ EC: Here, we can talk about
 
 Another model we can use to visualize regressing on one numerical variable and one categorical variable is known as a *parallel slopes* model. Unlike interaction models where the regression lines can have different intercepts and different slopes, parallel slopes models still allow for different intercepts but *force* all lines to have the same slope. This is done by using the indicator variable we previously introduced, ${1}_{\text{is male}}$. Each line will correspond to an outcome of this indicator variable. Let's visualize the best-fitting parallel slopes model to `earnings`.
 
-<!-- EC: Remove moderndive package??-->
-
 A function called `geom_parallel_slopes()` in the **moderndive** package allows us to plot the parallel slopes model for teaching income. Notice how the code is identical to the code that produced the visualization of the interaction model previously, but now the `geom_smooth(method = "lm", se = FALSE)` layer is replaced with `geom_parallel_slopes(se = FALSE)`. 
 
 ```{r eval=FALSE}
-<<<<<<< HEAD
+
 ggplot(earnings, aes(x = age, y = income, color = gender)) +
-=======
-ggplot(earnings, aes(x = age, y = score, color = gender)) +
->>>>>>> master
   geom_point() +
   labs(x = "Age", y = "Income", color = "Gender") +
   geom_parallel_slopes(se = FALSE)
 ```
 
-<<<<<<< HEAD
+
 ```{r echo=FALSE, warning=FALSE, fig.cap="Parallel slopes model of income with age and gender.", fig.height=3.5}
 par_slopes <- ggplot(earnings, aes(x = age, y = income, color = gender)) +
-=======
-```{r echo=FALSE, warning=FALSE, fig.cap="Parallel slopes model of score with age and gender.", fig.height=3.5}
-par_slopes <- ggplot(earnings, aes(x = age, y = score, color = gender)) +
->>>>>>> master
   geom_point() +
   labs(x = "Age", y = "Income", color = "Gender") +
   geom_parallel_slopes(se = FALSE)
@@ -584,11 +544,7 @@ In order to obtain the precise numerical values of the two intercepts and the si
 ```{r, eval=FALSE}
 # Fit regression model:
 
-<<<<<<< HEAD
 earnings_model_parallel_slopes <- lm(income ~ age + gender, data = earnings)
-=======
-score_model_parallel_slopes <- lm(score ~ age + gender, data = earnings)
->>>>>>> master
 
 # Get regression table:
 
@@ -597,13 +553,9 @@ earnings_model_parallel_slopes %>%
   select(term, estimate, conf.low, conf.high)
 ```
 ```{r echo=FALSE}
-<<<<<<< HEAD
+
 earnings_model_parallel_slopes <- lm(income ~ age + gender, data = earnings)
 tidy(earnings_model_parallel_slopes,
-=======
-score_model_parallel_slopes <- lm(score ~ age + gender, data = earnings)
-tidy(score_model_parallel_slopes,
->>>>>>> master
      conf.int = TRUE) %>%
   select(term, estimate, conf.low, conf.high) %>%
   gt() %>%
@@ -672,20 +624,14 @@ which is the equation of the `r if_else(knitr::is_latex_output(), "lighter-color
 Great! We've considered both an interaction model and a parallel slopes model for our data. Let's compare the visualizations for both models side-by-side in Figure \@ref(fig:numxcatx-comparison).
 
 ```{r fig.width=8, echo=FALSE, warning=FALSE, fig.cap="Comparison of interaction and parallel slopes models."}
-<<<<<<< HEAD
+
 interaction_plot <- ggplot(earnings, aes(x = age, y = income, color = gender), show.legend = FALSE) +
-=======
-interaction_plot <- ggplot(earnings, aes(x = age, y = score, color = gender), show.legend = FALSE) +
->>>>>>> master
   geom_point() +
   labs(x = "Age", y = "Income", title = "Interaction model") +
   geom_smooth(method = "lm", se = FALSE) +
   theme(legend.position = "none")
-<<<<<<< HEAD
+
 parallel_slopes_plot <- ggplot(earnings, aes(x = age, y = income, color = gender), show.legend = FALSE) +
-=======
-parallel_slopes_plot <- ggplot(earnings, aes(x = age, y = score, color = gender), show.legend = FALSE) +
->>>>>>> master
   geom_point() +
   labs(x = "Age", y = "Income", title = "Interaction model") +
   geom_parallel_slopes(se = FALSE) +
@@ -718,11 +664,7 @@ newpoints <- earnings %>%
   slice(c(1, 5)) %>% 
   augment(earnings_model_interaction, newdata = .)
 
-<<<<<<< HEAD
 fitted_plot <- ggplot(earnings, aes(x = age, y = income, color = gender), show.legend = FALSE) +
-=======
-fitted_plot <- ggplot(earnings, aes(x = age, y = score, color = gender), show.legend = FALSE) +
->>>>>>> master
   geom_point() +
   labs(x = "Age", y = "Income", title = "Interaction model") +
   geom_smooth(method = "lm", se = FALSE) +
@@ -743,11 +685,7 @@ What are these two values of $\widehat{y}$ = $\widehat{\text{income}}$ precisely
 
 So our fitted values would be: $4.883 - 0.018 \cdot 36 = 4.25$ and $4.437 - 0.004 \cdot 59 = 4.20$, respectively. 
 
-<<<<<<< HEAD
 Now what if we want the fitted values not just for these two subjects, but for the subjects of all 463 courses included in the `earnings` data frame? Doing this by hand would be long and tedious! This is where the `augment()` function from the **broom** package can help: it will quickly automate the above calculations for all 463 courses. We present a preview of just the first 10 rows out of 463 in Table \@ref(tab:model4-points-table).  Just like in the last chapter, we'll use the `.se.fit` column to construct confidence intervals around our predicted values.
-=======
-Now what if we want the fitted values not just for these two instructors, but for the instructors of all 463 courses included in the `earnings` data frame? Doing this by hand would be long and tedious! This is where the `augment()` function from the **broom** package can help: it will quickly automate the above calculations for all 463 courses. We present a preview of just the first 10 rows out of 463 in Table \@ref(tab:model4-points-table).  Just like in the last chapter, we'll use the `.se.fit` column to construct confidence intervals around our predicted values.
->>>>>>> master
 
 ```{r, eval=FALSE}
 regression_points <- earnings_model_interaction %>%
