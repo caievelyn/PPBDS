@@ -5,9 +5,15 @@ output_yaml:
 
 # Continuous Response II {#multiple-regression}
 
-<!-- EC: Is it better to load all the libraries in the top chunk all at once? Or should I load whenever I use them (eg. loading PPBDS.data only when introducing that dataset) -->
+<!-- EC: Chapter Organization
+Since Ch. 14 might be partially absorbed into this chapter, I'm wondering how to organize it.
+Concepts in this chapter are multivariate regression, interaction models, parallel slope models, model selection, 3D scatterplots & regression planes. Concepts in Ch 14 are using tidymodels, machine learning, and cross validation. Here's a rough outline;
+1. Multivariate regression and tidymodels
+2. Interaction models, parallel slope models, model selection
+3. 3D scatterplots & regression planes
+4. Introducing machine learning
+5. Using tidymodels for cross validation-->
 
-<!-- EC: The parallel slopes function from the `moderndive` package is used extensively in this chapter. Does the `moderndive` removal guideline only affect datasets, or functions as well? -->
 
 <!-- EC: Dataset replacement proposals
 UT Austin example: trains or sps. I need another dataset regressing on one numerical and one categorical variable, also the datasets are similar in that they analyze evaluation scores. 
