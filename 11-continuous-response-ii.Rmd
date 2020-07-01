@@ -62,6 +62,8 @@ library(scales)
 
 ## Income and Gender: One numerical and one categorical explanatory variable {#model4}
 
+<!-- EC: Is income appropriate? It's interesting but also not a completely continuous variable -->
+
 Recall the `trains` dataset, which examines the immigration attitudes of daily commuters in a predominantly white Massachusetts town. The dataset provides demographic information for its subjects, as well as data relevant to the experiment. In this section, let's focus on the demographic data, namely income, age, and gender. Our outcome variable will be income, a continuous variable, and our two explanatory variables will be age and gender.
 
 Could it be that subjects who are older earn higher incomes, perhaps because they have had time to climb up the career ladder? Are there differences in incomes for subjects of the same age, but of different genders? What can we predict for the income of, say, a 30-year-old woman in this town? We'll answer these questions by modeling the relationship between these variables using *multiple regression*, where we have:
@@ -305,7 +307,7 @@ $$
 &= 131906 -128	\cdot \text{age} - 45119 \cdot \mathbb{1}_{\text{is male}}(x) 1671 \cdot \text{age} \cdot \mathbb{1}_{\text{is male}}
 \end{aligned}
 $$
-First, let's use an indicator variable, ${1}_{\text{is male}}$, that assigns a value of 0 or 1 based on whether the professor is male or not.
+First, let's use an indicator variable, ${1}_{\text{is male}}$, that assigns a value of 0 or 1 based on whether the subject is male or not.
 
 $$
 \mathbb{1}_{\text{is male}}(x) = \left\{
@@ -337,7 +339,7 @@ which is the equation of the red regression line corresponding to the female sub
 $$
 \begin{aligned}
 \widehat{y} = \widehat{\text{income}} &= 131906 - 128	\cdot \text{age} - 45119 + 1671 \cdot \text{age}\\
-&= (131906 - 128) + (- 128 + 1671) * \text{age}\\
+&= (131906 - 45119) + (- 128 + 1671) * \text{age}\\
 &= 131906 + 1544	\cdot \text{age}\\
 \end{aligned}
 $$
@@ -562,7 +564,7 @@ tidy(earnings_model_parallel_slopes,
              conf.high = html("<b>conf.high</b>"))
 ```
 
-Similarly to the regression table for the interaction model from Table \@ref(tab:regtable-interaction), we have an `intercept` term corresponding to the intercept for the "baseline for comparison" female subject group and a `gendermale` term corresponding to the *offset* in intercept for the male participants relative to female participants. In other words, the `r if_else(knitr::is_latex_output(), "darker-colored", "red")` regression line corresponding to the female subjects has an intercept of 94053 while the `r if_else(knitr::is_latex_output(), "lighter-colored", "blue")` regression line corresponding to the male subjects has an intercept of 94053 + 25236 = `r 94053 + 25236`. Once again, since there aren't any participants of age 0, the intercepts only have a mathematical interpretation but no practical one. 
+Similarly to the regression table for the interaction model from Table \@ref(tab:regtable-interaction), we have an `intercept` term corresponding to the intercept for the "baseline for comparison" female subject group and a `gendermale` term corresponding to the *offset* in intercept for the male subjects relative to female subjects. In other words, the `r if_else(knitr::is_latex_output(), "darker-colored", "red")` regression line corresponding to the female subjects has an intercept of 94053 while the `r if_else(knitr::is_latex_output(), "lighter-colored", "blue")` regression line corresponding to the male subjects has an intercept of 94053 + 25236 = `r 94053 + 25236`. Once again, since there aren't any subjects of age 0, the intercepts only have a mathematical interpretation but no practical one. 
 
 ```{r echo=FALSE}
 age_coef <- tidy(earnings_model_parallel_slopes) %>% 
@@ -570,14 +572,14 @@ age_coef <- tidy(earnings_model_parallel_slopes) %>%
   pull(estimate)
 ```
 
-Unlike the interaction table shown previously, however, we now only have a single slope for age of `r age_coef`. This is because the model dictates that both the female and male participants have a common slope for age. This is telling us that a participant who is a year older than another subject received a teaching income that is on average `r round(age_coef, digits = 2)` units *higher*. This reward for being of advanced age applies equally to both female and male subjects. 
+Unlike the interaction table shown previously, however, we now only have a single slope for age of `r age_coef`. This is because the model dictates that both the female and male subjects have a common slope for age. This is telling us that a subject who is a year older than another subject received a teaching income that is on average `r round(age_coef, digits = 2)` units *higher*. This reward for being of advanced age applies equally to both female and male subjects. 
 
 Let's summarize these values in a table below, noting the different intercepts but common slopes:
 
 ```{r echo=FALSE}
 options(digits = 4)
 tibble(
-  Gender = c("Female participants", "Male participants"),
+  Gender = c("Female subjects", "Male subjects"),
   Intercept = c(94053, 119288.821),
   `Slope for age` = c(795.836, 795.836)
 ) %>% 
@@ -648,13 +650,11 @@ At this point, you might be asking yourself: "Why would we ever use a parallel s
 
 ### Observed/fitted values and residuals {#model4points}
 
-<!-- For brevity's sake, in this section we'll only compute the observed values, fitted values, and residuals for the interaction model which we saved in `earnings_model_interaction`.  -->
-
-Let's say we now have a 36 year old female commuter and a 59 year old male commuter who didn't participate in the experiment. What fitted values $\widehat{y}$ = $\widehat{\text{income}}$ would our `earnings_model_interaction` yield? 
+Let's say we now have a 36 year old female subject and a 59 year old male subject. What fitted values $\widehat{y}$ = $\widehat{\text{income}}$ would our `earnings_model_interaction` yield?
 
 We answer this question visually first for the female subject by finding the intersection of the `r if_else(knitr::is_latex_output(), "darker-colored", "red")` regression line and the vertical line at $x$ = age = 36. We mark this value with a large `r if_else(knitr::is_latex_output(), "darker-colored", "red")` dot. Similarly, we can identify the fitted value $\widehat{y}$ = $\widehat{\text{income}}$ for the male subject by finding the intersection of the `r if_else(knitr::is_latex_output(), "lighter-colored", "blue")` regression line and the vertical line at $x$ = age = 59. We mark this value with a large `r if_else(knitr::is_latex_output(), "lighter-colored", "blue")` dot.
 
-```{r echo=FALSE, warning=FALSE, fig.cap="Fitted values for two new professors.", fig.height=4.7}
+```{r echo=FALSE, warning=FALSE, fig.cap="Fitted values for two new subjects.", fig.height=4.7}
 newpoints <- earnings %>% 
   slice(c(1, 5)) %>% 
   augment(earnings_model_interaction, newdata = .)
@@ -675,12 +675,12 @@ if(knitr::is_html_output()){
 
 What are these two values of $\widehat{y}$ = $\widehat{\text{income}}$ precisely? We can use the equations of the two regression lines we computed:
 
-* For all female subjects: $\widehat{y} = \widehat{\text{income}} = 4.883 - 0.018	\cdot \text{age}$
-* For all male subjects: $\widehat{y} = \widehat{\text{income}} = 4.437 - 0.004 \cdot \text{age}$
+* For all female subjects: $\widehat{y} = \widehat{\text{income}} = 131906 - 128	\cdot \text{age}$
+* For all male subjects: $\widehat{y} = \widehat{\text{income}} = 86787 + 1544 \cdot \text{age}$
 
-So our fitted values would be: $4.883 - 0.018 \cdot 36 = 4.25$ and $4.437 - 0.004 \cdot 59 = 4.20$, respectively. 
+So our fitted values would be: $131906 - 128	\cdot 36 = 127298$ and $86787 + 1544 \cdot 59 = 177883$, respectively. 
 
-Now what if we want the fitted values not just for these two subjects, but for the subjects of all 463 courses included in the `earnings` data frame? Doing this by hand would be long and tedious! This is where the `augment()` function from the **broom** package can help: it will quickly automate the above calculations for all 463 courses. We present a preview of just the first 10 rows out of 463.  Just like in the last chapter, we'll use the `.se.fit` column to construct confidence intervals around our predicted values.
+Now what if we want the fitted values not just for these two subjects, but for all of the subjects in the `trains` experiment? Doing this by hand would be long and tedious! This is where the `augment()` function from the **broom** package can help: it will quickly automate the above calculations for all 115 subjects. Just like in the last chapter, we'll use the `.se.fit` column to construct confidence intervals around our predicted values.
 
 ```{r, eval=FALSE}
 regression_points <- earnings_model_interaction %>%
@@ -698,10 +698,10 @@ regression_points <- augment(earnings_model_interaction) %>%
 regression_points %>%
   slice(1:10) %>%
   gt() %>%
-  tab_header(title = "Regression points (First 10 out of 463 courses)")
+  tab_header(title = "Regression points (First 10 out of 115 subjects)")
 ```
 
-It turns out that the female subject of age 36 taught the first four courses, while the male subject taught the next 3. The resulting $\widehat{y}$ = $\widehat{\text{income}}$ fitted values are in the `.fitted` column. Furthermore, the `augment()` function also returns the residuals $y-\widehat{y}$.  Notice, for example, the first and fourth courses the female subject of age 36 taught had positive residuals, indicating that the actual incomes they received from students were greater than their fitted income of 4.25. On the other hand, the second and third courses this subject taught had negative residuals, indicating that the actual teaching scores they received from students were less than 4.25. 
+The `augment()` function also returns the residuals $y-\widehat{y}$.  Notice that there are both positive and negative residuals for both male and female subjects. 
 
 ## Credit card debt: two numerical explanatory variables {#model3}
 
