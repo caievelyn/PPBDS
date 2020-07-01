@@ -7,21 +7,18 @@ output_yaml:
 
 ```{r include=FALSE}
 # First code chunk is always the libraries we need for the chapter but which we
-# don't use in code which students see.
+# don't use in code which students see. Test add.
 
 library(tufte)
 library(gt) 
 
 # I doubt we need all of these.
 
-library(knitr)
-library(kableExtra)
 library(patchwork)
 ```
 
-<!-- DK: Here are some more big picture thoughts. -->
 
-<!-- First, do we really need all the penny stuff? Is it pedagogically use? I am honestly unsure. On one hand, it seems fairly well-done. Why not keep it, and introduce these confusing concepts to students twice? On other hand, we could just delete it. Cutting text is an editor's most important task. Whether we keep it or not, the next part will be an examination of qscores. -->
+<!-- First, do we really need all the penny stuff? Is it pedagogically useful? I am honestly unsure. On one hand, it seems fairly well-done. Why not keep it, and introduce these confusing concepts to students twice? On other hand, we could just delete it. Cutting text is an editor's most important task. Whether we keep it or not, the next part will be an examination of qscores. -->
 
 <!-- Second, the qscores sections begins with an exploratory data analysis, as newly discussed in style.Rmd. Then, filter for just "2018F", do set.seed(9) and take a sample of size 50 (without replacement) and only keep a few variables: course_name, department, rating. Then, use the bootstraps to estimate a confidence interval for the mean of rating for that semester.  With that done, we can have some fun. -->
 
@@ -38,16 +35,9 @@ library(patchwork)
 <!-- All of this allows us to hit all the themes from style.Rmd even though we are only estimating one parameter. I think that this is enough for one chapter, especially if we keep the pennies around. No need to get into other data sets. -->
 
 
-<!-- DK: Huh? "Get git pictures" This is cuz xome of the images were deleted --> 
-
-<!-- 0) Get rid of all kable(). Use gt() instead. -->
-
 <!-- 2) Need to get rid of `rep_sample_n()` and replace with `rsample:boostraps()`. Example usage [here](https://juliasilge.com/blog/beer-production/). Do this first, just to get warmed up. Make sure everything still works! Consult this [useful tutorial](https://www.danielphadley.com/bootstrap_tutto/) for the bootstraps function. We can keep everything else with the penny example the same, for now. -->
 
-<!-- 3) Clean up "absurd hack" table code. -->
-
 <!-- 4) After completing the current penny example, show how we can estimate other estimands --- the median, 3rd biggest, et cetera --- in exactly the same way. All the same procedures apply in these cases. Obviously, we can go much faster and don't have to do them all. Key is to see that there are many things (and their uncertainty) which we can estimate. The mean is just one of them. We can still just use our standard Bayesian interpretation for all these estimands and uncertainty intervals. -->
-
 
 <!-- 3) Refer back to the probability chapter. Note that it ends with the estimating of a single parameter, the p associated with a coin. You want to remind readers of what they have already learned and also move a little bit further. Read the set of notes at the start of chapter 6.  -->
 
@@ -181,9 +171,8 @@ Here our population is $N$ = whatever the number of pennies are being used in th
 We summarize the correspondence between the sampling urn exercise in Chapter \@ref(sampling) and our pennies exercise in Table \@ref(tab:table-ch8-b).
 
 
-
-
 ```{r, echo=FALSE}
+
 absurd_hack <- tibble(Scenario = c("1", "2", "3", "4", "5", "6"), 
                       Population_parameter = c("Population Proportion", "Population mean", "Difference in population proportions", "Difference in Pupulation means", "Population regression slope", "Population regression coefficient"),
                       Notation = c("$$p$$", "$$\\mu $$", "$$p_1 - p_2$$", "$$\\mu_1 - \\mu_2$$", "$$\\beta_1$$", "$$\\beta_0$$"), 
@@ -678,7 +667,9 @@ Imagine we want to forecast the high temperature in Seoul, South Korea on August
 
 We need this wider range to allow for the possibility of anomalous weather, like a freak cold spell or an extreme heat wave. So a range of temperatures we could be near certain about would be between 32&deg;F - 110&deg;F (0&deg;C - 43&deg;C). On the other hand, if we could tolerate being a little less confident, we could narrow this range to between 70&deg;F - 85&deg;F (21&deg;C - 30&deg;C). 
 
-<!-- DK: Is it a good idea to go back to the urn example here? Why not just stick with pennies? Or perhaps it is important to connect the previous chapter to this one, to see how our new knowledge of confidence intervals applies in the urn case. Even if we do keep it, this part definitely goes much too fast. First, remind people about the urn. Then, do one sample and show how we can build a confidence interval from that, at a given confidence level. Then show how we build it for different confidence levels. Then do it 10 times for each confidence level. Or something like that. -->
+<!-- Is it a good idea to go back to the urn example here? Why not just stick with pennies? Or perhaps it is important to connect the previous chapter to this one, to see how our new knowledge of confidence intervals applies in the urn case. Even if we do keep it, this part definitely goes much too fast. First, remind people about the urn. Then, do one sample and show how we can build a confidence interval from that, at a given confidence level. Then show how we build it for different confidence levels. Then do it 10 times for each confidence level. Or something like that. 
+
+-->
 
 Let's revisit our sampling urn from Chapter \@ref(sampling). Let's compare $10 \cdot 3 = 30$ confidence intervals for $p$ based on three different confidence levels: 80%, 95%, and 99%. 
 
@@ -700,7 +691,7 @@ perc_cis_80 <- urn %>%
 perc_cis_80
 ```
 
-<!-- DK: Is this the first time we are using nest? If so, it is going way too fast! -->
+<!-- Is this the first time we are using nest? If so, it is going way too fast! And nest() has more options now in dplyr 1.0. -->
 
 Next, we'll construct a confidence interval for each one.  This will require `nest`ing the data by sample and then `map`ping to construct each confidence interval.  Let's grab 1,000 bootstrap replicates for each sample:
 
