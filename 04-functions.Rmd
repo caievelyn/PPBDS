@@ -39,6 +39,16 @@ The goal of this chapter is to reveal the __process__ a long-time useR employs f
 
 First, let's introduce the concept of functions. A function is a piece of code that is packaged in a way that makes it easy to reuse. Functions make it easy for you to `filter()`, `sort()`, `select()`, and create a `data.frame()`, as you have seen in the last few chapters. Functions also allow you to transform variables and perform a bunch of useful mathematical calculations, such as finding the `min()`, `max()`, and `quantile()`s of a dataset. Functions are also important in generating data and values, such as using `rnorm()` to randomly generate a normal distribution.
 
+Note that every time we mention a function, we include the parentheses. This is because you call a function by including its parentheses and any necessary arguments in those parentheses. If you run the function name without its parentheses, R will return the code that makes up the function. 
+
+```{r echo = TRUE}
+Sys.Date
+```
+
+```{r echo = TRUE}
+Sys.Date()
+```
+
 Every R function has three parts:
 
 * A body of code
