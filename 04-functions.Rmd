@@ -190,7 +190,7 @@ tibble(start = c(3, 2.5, 6)) %>%
 
 `sqrt()` with the parentheses is a call to the function. So, the first thing R tries to do is to run the function. Doing so fails because `sqrt()` requires an argument `x`, which is empty. 
 
-```{marginfigure, echo = TRUE}
+```{marginfigure, echo = TRUE, fig.margin = TRUE}
 Lesson: When passing a function in to `map_*` functions, pass just the name.
 ```
 
@@ -483,8 +483,8 @@ rnorm(1000) %>% hist()
 
 `rnorm()` has three arguments: `n`, `mean`, and `sd`. `n` corresponds to the number of observations, `mean` corresponds to the average as a whole, and `sd` corresponds to the size of the standard deviation from the mean. We will go further in depth in future chapters on what the statistical mechanics are behind these distributions, but for now, let's focus on creating a Normal distribution.
 
-```{r marginfigure-2, echo=FALSE}
-"Insert Normal formula here."
+```{marginfigure, echo=TRUE}
+Insert Normal formula here.
 ```
 
 If we run the following:
@@ -511,8 +511,8 @@ Now it's looking a lot more similar! As you just discovered, the more observatio
 
 The function `runif()` can be read as "r-unif". It corresponds to a Uniform distribution, in which every outcome has the same chance of occurring. A Uniform distribution you might encounter everyday is rolling a fair die. You are as likely to roll a 2 as you are to roll a 6.
 
-```{r marginfigure-3, echo=FALSE}
-"Insert uniform formula here."
+```{marginfigure, echo=TRUE}
+Insert uniform formula here.
 ```
 
 The `runif()` function allows us to create our own uniform distributions with the specifications `n`, `min`, and `max`. Note that in R, `runif()` returns a continuous uniform distribution, not a discrete one. This means that if we tried to simulate our die-rolling example, we would get decimal values.
