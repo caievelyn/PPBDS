@@ -138,3 +138,8 @@ If you do not have the proper packages installed for a tutorial, a pop-up messag
 
 `r include_graphics("00-shopping-week/images/tutorial_popup.gif")`
 
+You've finished a tutorial! Now what? There are a few ways you can close out of a tutorial safely so you can quit your RStudio session.
+
+* If you clicked "Show in new window" and were working on the tutorial in a pop-up window, simply X out of the pop-up window
+* If you were working on the tutorial inside the Tutorial pane of RStudio, simply press the red stop sign icon
+* If you accidentally clicked "Start Tutorial", you can navigate to the Jobs tab in the bottom left quadrant of RStudio. Clicking the back arrow, and then press the red stop sign icon.
