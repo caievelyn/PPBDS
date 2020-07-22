@@ -69,6 +69,18 @@ function(x) x + 1
 
 These nameless functions are called [anonymous functions.](https://coolbutuseless.github.io/2019/03/13/anonymous-functions-in-r-part-1/) We can create functions that do operations "on the fly" without bothering to give them a name.
 
+Functions can do all sorts of things. Below, `sample()` takes a vector of values and spits out a number of random values from that vector. You can specify the number of random values with the argument `size`. Let's take it for a spin. This is the equivalent of rolling a die!
+
+```{r echo=TRUE}
+sample(x = 1:6, size = 1)
+```
+
+Functions can also take in other functions as arguments. For example, `replicate()` takes an expression and repeats it for `n` specified times. This is really useful when you want to generate many iterations of data. What if we replicated the rolling of a die ten times?
+
+```{r echo=TRUE}
+replicate(10, sample(1:6, 1))
+```
+
 We will dive into functions more in depth soon, but next we will discuss of list-columns and `map_*` functions. 
 
 ## List-columns and `map_*` functions
@@ -459,42 +471,6 @@ The tidyverse style guide has a very useful [chapter on how to construct error m
 
 Another good use of this pattern is to leave checks behind in data analytical scripts. Consider our repetitive use of Gapminder in this book. Every time we load it, we inspect it, hoping to see the usual stuff. If we were loading from file (vs. a stable data package), we might want to formalize our expectations about the number of rows and columns, the names and flavors of the variables, etc. This would alert us if the data suddenly changed, which can be a useful wake-up call in scripts that you re-run *ad nauseam* on auto-pilot or non-interactively.
 
-### Using functions to generate data randomly
-
-<!-- EC:  Added section using rnorm(), runif(), sample(), and replicate(). Review?-->
-
-As data scientists, there are many reasons to create your own data. Perhaps you'd like to run a simulation as a baseline for comparison to another dataset that contains observed values. Or, perhaps you want to create a quick "fake" dataset to model real world phenomena. Either way, you will realize that at one point, you would like to generate data, which will induce some element of *randomness*. See, there is no point in manually creating a dataset in which you already *know* what every observation looks like. Real life is messy! Next, we will be introducing four functions that can be used to generate data ranomdly.
-
- If we really want to simulate the discrete uniform distribution of dice rolling, there is a better function to do so: `sample()`.
-
-#### `sample()` and `replicate()`
-
-`sample()` takes a vector of values and spits out a number of random values from that vector. You can specify the number of random values with the argument `size`. Let's take it for a spin.
-
-```{r echo=TRUE}
-sample(x = 1:6, size = 1)
-```
-
-What if we want to roll the dice 3 times? Make sure that the `replace` argument is set to `TRUE`. This will ensure that each number is able to be rolled, regardless of what the previous rolls resulted in.
-
-```{r echo=TRUE}
-sample(x = 1:6, size = 3, replace = TRUE)
-```
-
-Perfect! The last function we want to introduce is `replicate()`, which interacts really well with the above three functions. `replicate()` takes an expression and repeats it for `n` specified times. This is really useful when you want to generate many iterations of data. What if we replicated the rolling of two dice ten times?
-
-```{r echo=TRUE}
-replicate(10, sample(1:6, 2))
-```
-
-As you can see, the default output is an array.
-
-```{r echo=TRUE}
-replicate(10, sample(1:6, 2), simplify = FALSE)
-```
-
-Setting `simplify=FALSE` turns it into a list of `n = 10` elements.
-
 ### Wrap-up and what's next?
 
 Here's the function we've written so far:
@@ -508,7 +484,6 @@ What we've accomplished:
 * We've written our first function.
 * We are checking the validity of its input, argument `x`.
 * We've done a good amount of informal testing.
-* We have been introduced to data generating functions.
   
 ## Argument Specifications and Default Values
 
