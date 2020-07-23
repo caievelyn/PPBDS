@@ -135,9 +135,7 @@ For each chapter of the textbook, there is a corresponding tutorial available in
 
 In order to expand the window, you can drag and enlarge the tutorial pane inside RStudio. In order to open a popup window, click the "Show in New Window" icon next to the home icon.
 
-If you do not have the proper packages installed for a tutorial, a pop-up message will show asking you to install the specified packages. For the Visualization tutorial, you may not have the package ***viridis***. R will ask you whether to proceed the download; click "yes".
-
-`r include_graphics("00-shopping-week/images/viridis_install.PNG")`
+You may notice that the Jobs tab will create output as the tutorial is starting up. This is because RStudio is running the code to create the tutorial. If you accidentally clicked "Start Tutorial" and would like to stop the job from running, you can click the back arrow in the Jobs tab, and then press the red stop sign icon.
 
 3. Your work will be saved between sessions, so you can complete the tutorial in multiple sittings. In order to complete the tutorial successfully, make sure you enter your name at the very beginning and answer all questions. Once you have completed the tutorial, follow the instructions on the tutorial `Submit` page and upload the resulting `responses.rds` file to Canvas.
 
@@ -147,4 +145,3 @@ You've finished a tutorial! Now what? There are a few ways you can close out of 
 
 * If you clicked "Show in new window" and were working on the tutorial in a pop-up window, simply X out of the pop-up window
 * If you were working on the tutorial inside the Tutorial pane of RStudio, simply press the red stop sign icon
-* If you accidentally clicked "Start Tutorial", you can navigate to the Jobs tab in the bottom left quadrant of RStudio. Clicking the back arrow, and then press the red stop sign icon.
