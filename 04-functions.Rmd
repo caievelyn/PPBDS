@@ -314,7 +314,7 @@ Later on, we will practice using map functions to create list columns with custo
 
 <!-- EC: I still like the basic introducton to building a function, so I replaced gapminder with `kenya`. Thoughts? -->
 
-Let's examine the `kenya` dataset from `PPBDS.data`. Make sure to load the library. What if we were interested in taking the difference between the highest poverty rate and the lowest poverty rate? First, develop some working code for interactive use, using a representative input. Use the `poverty` variable. Built-in R functions that will be useful: `min()`, `max()`, `range()`. 
+Let's examine the `kenya` dataset from `PPBDS.data`. Make sure to load the library. What if we were interested in taking the difference between the highest poverty rate and the lowest poverty rate? First, develop some working code for interactive use, using a representative input. Use the `poverty` variable. Built-in R functions that will be useful: `min()`, `max()`, `range()`.
 
 ```{r}
 # Get to know the functions mentioned above
@@ -406,7 +406,6 @@ Either check these results "by hand" or apply the "does that even make sense?" t
 Now we try to break our function. Don't get truly diabolical (yet). Just make the kind of mistakes you can imagine making at 2am when, 3 years from now, you rediscover this useful function you wrote. Give your function inputs it's not expecting.
 
 ```{r error = TRUE}
-library(PPBDS.data)
 max_minus_min(kenya)
 
 # Hey, sometimes things "just work" on data.frames!
