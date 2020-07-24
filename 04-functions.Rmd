@@ -102,7 +102,6 @@ Now that we understand what a list is, what is a list-column? A list column is a
 
 ```{r simple_list_col, message=FALSE}
 library(tidyverse)
-library(gapminder)
 
 tibble(new_col = list(1:2, 3:5)) %>%
   str()
@@ -154,25 +153,25 @@ tibble(col_1 = c("Alice and Bob", "Carol and Dan")) %>%
 
 After using `str_split()` within `mutate()`, we have created a new column, and that new column is a list column. 
 
-This is often how we will go about creating list columns.  Let's practice with the `gapminder` dataset.  How could we add a column to the dataset that included the quantiles of the `lifeExp` variable?
+This is often how we will go about creating list columns.  Let's practice with the `kenya` dataset.  How could we add a column to the dataset that included the quantiles of the `poverty` variable?
 
-```{r gapminder_list_column}
-gapminder %>%
-  group_by(year) %>%
-  mutate(lifeExpQuantile = list(quantile(lifeExp)))
+```{r kenya_list_column}
+kenya %>%
+  group_by(block) %>%
+  mutate(povertyQuantile = list(quantile(poverty)))
 ```
 
 *Note*: `str_split()` was a particularly easy function for using with `mutate()` and `summarize()` because it returns a list.  You can check this by running `typeof()` on the output of `str_split()`: e.g., `str_split("Alice and Bob", " and ") %>% typeof()`.  If a function returns multiple values as a vector, like `quantile()` does, you can't use it directly in `mutate()` or `summarize()`, but you can wrap `list()` around it in order to get the same behavior.
 
 <!-- DK: The above bit should be explained at the beginning when we review lists. -->
 
-Or let's say that we wanted 1) to subset the dataset to the most recent year, 2) group by continent, and 3) get a `summary()` of the `gdpPercap` variable by continent:
+Or let's say that we wanted 1) to subset the dataset to the those with `treatment == "control"`, 2) group by `block`, and 3) get a `summary()` of the `distance` variable by continent:
 
 ```{r continent_summary}
-gapminder %>%
-  filter(year == max(year)) %>%
-  group_by(continent) %>%
-  summarize(gdpSummary = list(summary(gdpPercap)))
+kenya %>%
+  filter(treatment == "control") %>%
+  group_by(block) %>%
+  summarize(distSummary = list(summary(distance)))
 ```
 
 ### `map_*` functions
@@ -291,33 +290,44 @@ Later on, we will practice using map functions to create list columns with custo
 
 ## Built-In Functions and Custom Functions
 
-Load gapminder.
+<!-- EC: Where should this section go? -->
 
-```{r start_func1}
-library(gapminder)
-str(gapminder)
+### Data Generating Mechanisms
+
+As data scientists, there are many reasons to generate "fake data" -- as in, data that does not exist naturally in this world. Perhaps you'd like to run a simulation. Or, perhaps you want to predict a fitted value for a real world phenomena. Either way, you will realize that at one point, you would like to generate data, which will induce some element of *randomness*. See, there is no point in manually creating a dataset in which you already *know* what every observation looks like. Real life is messy and real data has a lot of variation! Next, we will be creating our own data generation mechanism through a custom function.
+
+Take a look at the `runif()` and `rnorm()` functions again.
+
+```{r}
+runif(1)
 ```
 
-Say you've got a numeric vector, and you want to compute the difference between its max and min. `lifeExp` or `pop` or `gdpPercap` are great examples of a typical input. You can imagine wanting to get this statistic after we slice up the Gapminder data by year, country, continent, or combinations thereof.
+```{r}
+rnorm(1)
+```
 
-### Get something that works
+These two functions are what we call built-in functions. We don't do any of the work to code them!
 
-First, develop some working code for interactive use, using a representative input. Use Gapminder's life expectancy variable. R functions that will be useful: `min()`, `max()`, `range()`. 
+### Building your first custom function
+
+<!-- EC: I still like the basic introducton to building a function, so I replaced gapminder with `kenya`. Thoughts? -->
+
+Let's examine the `kenya` dataset from `PPBDS.data`. Make sure to load the library. What if we were interested in taking the difference between the highest poverty rate and the lowest poverty rate? First, develop some working code for interactive use, using a representative input. Use the `poverty` variable. R functions that will be useful: `min()`, `max()`, `range()`. 
 
 ```{r}
 # Get to know the functions mentioned above
 
-min(gapminder$lifeExp)
-max(gapminder$lifeExp)
-range(gapminder$lifeExp)
+min(kenya$poverty)
+max(kenya$poverty)
+range(kenya$poverty)
 
 # Some natural solutions
 
-max(gapminder$lifeExp) - min(gapminder$lifeExp)
-with(gapminder, max(lifeExp) - min(lifeExp))
-range(gapminder$lifeExp)[2] - range(gapminder$lifeExp)[1]
-with(gapminder, range(lifeExp)[2] - range(lifeExp)[1])
-diff(range(gapminder$lifeExp))
+max(kenya$poverty) - min(kenya$poverty)
+with(kenya, max(poverty) - min(poverty))
+range(kenya$poverty)[2] - range(kenya$poverty)[1]
+with(kenya, range(poverty)[2] - range(poverty)[1])
+diff(range(kenya$poverty))
 ```
 
 Internalize this "answer" because our informal testing relies on you noticing departures from this.
@@ -342,7 +352,7 @@ Add NO new functionality! Just write your very first R function.
 
 ```{r}
 max_minus_min <- function(x) max(x) - min(x)
-max_minus_min(gapminder$lifeExp)
+max_minus_min(kenya$poverty)
 ```
 
 Check that you're getting the same answer as you did with your interactive code. Test it eyeball-o-metrically at this point.
@@ -380,11 +390,11 @@ It is intentional that I tested on integer input as well as floating point. Like
 
 #### Test on real data but *different* real data
 
-Back to the real world now. Two other quantitative variables are lying around: `gdpPercap` and `pop`. Let's have a go.
+Back to the real world now. Two additional quantitative variables are lying around: `distance` and `rv13`. Let's have a go.
 
 ```{r}
-max_minus_min(gapminder$gdpPercap)
-max_minus_min(gapminder$pop)
+max_minus_min(kenya$distance)
+max_minus_min(kenya$rv13)
 ```
 
 Either check these results "by hand" or apply the "does that even make sense?" test.
@@ -394,11 +404,11 @@ Either check these results "by hand" or apply the "does that even make sense?" t
 Now we try to break our function. Don't get truly diabolical (yet). Just make the kind of mistakes you can imagine making at 2am when, 3 years from now, you rediscover this useful function you wrote. Give your function inputs it's not expecting.
 
 ```{r error = TRUE}
-max_minus_min(gapminder)
+max_minus_min(kenya)
 
 # Hey, sometimes things "just work" on data.frames!
 
-max_minus_min(gapminder$country)
+max_minus_min(kenya$treatment)
 
 # Factors are kind of like integer vectors, no?
 
@@ -415,7 +425,7 @@ How happy are you with those error messages? You must imagine that some entire _
 Here are some great examples where the function __should break but it does not.__
 
 ```{r}
-max_minus_min(gapminder[c('lifeExp', 'gdpPercap', 'pop')])
+max_minus_min(kenya[c('poverty', 'distance', 'rv13')])
 max_minus_min(c(TRUE, TRUE, FALSE, TRUE, TRUE))
 ```
 
@@ -439,7 +449,7 @@ mmm <- function(x) {
 mmm(gapminder)
 mmm(gapminder$country)
 mmm("eggplants are purple")
-mmm(gapminder[c('lifeExp', 'gdpPercap', 'pop')])
+mmm(gapminder[c('poverty', 'gdpPercap', 'pop')])
 mmm(c(TRUE, TRUE, FALSE, TRUE, TRUE))
 ```
 
@@ -533,18 +543,18 @@ The eventual inputs to our new function will be the data `x` and two probabiliti
 First, play around with the `quantile()` function. Convince yourself you know how to use it, for example, by cross-checking your results with other built-in functions.
 
 ```{r}
-quantile(gapminder$lifeExp)
-quantile(gapminder$lifeExp, probs = 0.5)
-median(gapminder$lifeExp)
-quantile(gapminder$lifeExp, probs = c(0.25, 0.75))
-boxplot(gapminder$lifeExp, plot = FALSE)$stats
+quantile(kenya$poverty)
+quantile(kenya$poverty, probs = 0.5)
+median(kenya$poverty)
+quantile(kenya$poverty, probs = c(0.25, 0.75))
+boxplot(kenya$poverty, plot = FALSE)$stats
 ```
 
 Now write a code snippet that takes the difference between two quantiles.
 
 ```{r}
 the_probs <- c(0.25, 0.75)
-the_quantiles <- quantile(gapminder$lifeExp, probs = the_probs)
+the_quantiles <- quantile(kenya$poverty, probs = the_probs)
 max(the_quantiles) - min(the_quantiles)
 ```
 
@@ -558,13 +568,13 @@ qdiff1 <- function(x, probs) {
   the_quantiles <- quantile(x = x, probs = probs)
   max(the_quantiles) - min(the_quantiles)
 }
-qdiff1(gapminder$lifeExp, probs = c(0.25, 0.75))
-IQR(gapminder$lifeExp)
+qdiff1(kenya$poverty, probs = c(0.25, 0.75))
+IQR(kenya$poverty)
 
 # Hey, we've reinvented IQR
 
-qdiff1(gapminder$lifeExp, probs = c(0, 1))
-mmm(gapminder$lifeExp)
+qdiff1(kenya$poverty, probs = c(0, 1))
+mmm(kenya$poverty)
 ```
 
 Again we do some informal tests against familiar results and external implementations.
@@ -579,7 +589,7 @@ qdiff2 <- function(zeus, hera) {
   the_quantiles <- quantile(x = zeus, probs = hera)
   max(the_quantiles) - min(the_quantiles)
 }
-qdiff2(zeus = gapminder$lifeExp, hera = 0:1)
+qdiff2(zeus = kenya$poverty, hera = 0:1)
 ```
 
 While we can name my arguments after Greek gods, it's usually a bad idea. Take all opportunities to make things more self-explanatory via meaningful names.
@@ -607,7 +617,7 @@ You absolutely must use `return()` if you want to return early based on some con
 What happens if we call our function but neglect to specify the probabilities?
 
 ```{r error = TRUE}
-qdiff1(gapminder$lifeExp)
+qdiff1(kenya$poverty)
 ```
 
 Oops! At the moment, this causes a fatal error. It can be nice to provide some reasonable default values for certain arguments. In our case, it would be crazy to specify a default value for the primary input `x`, but very kind to specify a default for `probs`.
@@ -625,9 +635,9 @@ qdiff3 <- function(x, probs = c(0, 1)) {
 Again we check how the function works, in old examples and new, specifying the `probs` argument and not.
 
 ```{r}
-qdiff3(gapminder$lifeExp)
-mmm(gapminder$lifeExp)
-qdiff3(gapminder$lifeExp, c(0.1, 0.9))
+qdiff3(kenya$poverty)
+mmm(kenya$poverty)
+qdiff3(kenya$poverty, c(0.1, 0.9))
 ```
 
 ### Wrap-up and what's next?
@@ -674,9 +684,9 @@ qdiff3 <- function(x, probs = c(0, 1)) {
 We are being gentle by letting you practice with the Gapminder data. In real life, missing data will make your life a living hell. If you are lucky, it will be properly indicated by the special value `NA`, but don't hold your breath. Many built-in R functions have an `na.rm =` argument through which you can specify how you want to handle `NA`s. Typically the default value is `na.rm = FALSE` and typical default behavior is to either let `NA`s propagate or to raise an error. Let's see how `quantile()` handles `NA`s:
 
 ```{r error = TRUE}
-z <- gapminder$lifeExp
+z <- kenya$poverty
 z[3] <- NA
-quantile(gapminder$lifeExp)
+quantile(kenya$poverty)
 quantile(z)
 quantile(z, na.rm = TRUE)
 ```
@@ -691,7 +701,7 @@ qdiff4 <- function(x, probs = c(0, 1)) {
   the_quantiles <- quantile(x, probs, na.rm = TRUE)
   max(the_quantiles) - min(the_quantiles)
 }
-qdiff4(gapminder$lifeExp)
+qdiff4(kenya$poverty)
 qdiff4(z)
 ```
 
@@ -705,7 +715,7 @@ qdiff5 <- function(x, probs = c(0, 1), na.rm = TRUE) {
   the_quantiles <- quantile(x, probs, na.rm = na.rm)
   max(the_quantiles) - min(the_quantiles)
 }
-qdiff5(gapminder$lifeExp)
+qdiff5(kenya$poverty)
 qdiff5(z)
 qdiff5(z, na.rm = FALSE)
 ```
