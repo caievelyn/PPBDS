@@ -11,8 +11,8 @@
 library(knitr)
 library(tufte)
 library(scales)
-library(skimr)
 library(gt)
+library(patchwork)
 
 options(digits = 2)
 
