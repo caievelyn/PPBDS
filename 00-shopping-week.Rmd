@@ -35,7 +35,51 @@ Third, I am highly opinionated about what matters and what does not. It is unlik
 
 ### Install R and RStudio
 
-<!-- DK: Move all related material from Chapter 1 to here and the provide a link from there. -->
+#### What are R and RStudio?
+
+```{r, echo=FALSE, fig.cap="Analogy of difference between R and RStudio.", fig.margin = TRUE}
+knitr::include_graphics("00-shopping-week/images/R_vs_RStudio_1.png")
+```
+
+Throughout this book, we assume that you are using R via RStudio. First time users often confuse the two. At its simplest, R is like a car's engine while RStudio is like a car's dashboard.
+
+More precisely, R is a programming language that runs computations, while RStudio is an *integrated development environment (IDE)* that provides an interface by adding many convenient features and tools. So just as the way of having access to a speedometer, rearview mirrors, and a navigation system makes driving much easier, using RStudio's interface makes using R much easier as well. 
+
+### Installing R and RStudio
+
+<!-- ::: {.fullwidth} -->
+You will first need to download and install both R and RStudio (Desktop version) on your computer. It is important that you install R first and then install RStudio.
+
+```{r, echo = FALSE, fig.margin = TRUE}
+
+# Tried testing out the webshot function using
+# webshot("https://cloud.r-project.org/"), but I did not like how it looked in
+# this section
+
+```
+
+1. **You must do this first:** Download and install R by going to <https://cloud.r-project.org/>. \index{R!installation}
+
+2. **You must do this second:** Download and install RStudio at <https://www.rstudio.com/products/rstudio/download/>.
+<!-- ::: -->
+
+### Using R via RStudio
+
+```{r echo=FALSE, fig.cap="Icons of R versus RStudio on your computer.", fig.margin = TRUE}
+knitr::include_graphics("01-visualization/images/R_vs_RStudio.png")
+```
+
+Recall our car analogy from earlier. Much as we don't drive a car by interacting directly with the engine but rather by interacting with elements on the car's dashboard, we won't be using R directly but rather we will use RStudio's interface. After you install R and RStudio on your computer, you'll have two new *programs* (also called *applications*) you can open. We'll always work in RStudio and not in the R application. 
+
+```{r echo=FALSE, fig.cap="RStudio interface to R.", fig.margin = TRUE}
+knitr::include_graphics("01-visualization/images/rstudio.png")
+```
+
+```{marginfigure}
+(Note that slight differences might exist from the figure if the RStudio interface is updated after 2019 to not be this by default.)
+```
+
+After you open RStudio, you should see three *panes*, or panels, dividing the screen: the *console pane*, the *files pane*, and the *environment pane*. Over the course of this chapter, you'll come to learn what purpose each of these panes serves. 
 
 To start off, you'll need to download the necessary software:
 

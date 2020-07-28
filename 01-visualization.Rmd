@@ -56,9 +56,8 @@ library(nycflights13)
 
 Before we can start exploring data in R, there are some key concepts to understand first:
 
-1. What are R and RStudio?
-2. How do I code in R?
-3. What are R packages?
+1. How do I code in R?
+2. What are R packages?
 
 <!-- What's the best way to deal with references? Should I leave them as is for now and then check if they're correct later? -->
 
