@@ -47,55 +47,29 @@ More precisely, R is a programming language that runs computations, while RStudi
 
 ### Installing R and RStudio
 
-<!-- ::: {.fullwidth} -->
 You will first need to download and install both R and RStudio (Desktop version) on your computer. It is important that you install R first and then install RStudio.
-
-```{r, echo = FALSE, fig.margin = TRUE}
-
-# Tried testing out the webshot function using
-# webshot("https://cloud.r-project.org/"), but I did not like how it looked in
-# this section
-
-```
 
 1. **You must do this first:** Download and install R by going to <https://cloud.r-project.org/>. \index{R!installation}
 
 2. **You must do this second:** Download and install RStudio at <https://www.rstudio.com/products/rstudio/download/>.
-<!-- ::: -->
 
 ### Using R via RStudio
 
 ```{r echo=FALSE, fig.cap="Icons of R versus RStudio on your computer.", fig.margin = TRUE}
-knitr::include_graphics("01-visualization/images/R_vs_RStudio.png")
+knitr::include_graphics("00-shopping-week/images/R_vs_RStudio.png")
 ```
 
 Recall our car analogy from earlier. Much as we don't drive a car by interacting directly with the engine but rather by interacting with elements on the car's dashboard, we won't be using R directly but rather we will use RStudio's interface. After you install R and RStudio on your computer, you'll have two new *programs* (also called *applications*) you can open. We'll always work in RStudio and not in the R application. 
 
-```{r echo=FALSE, fig.cap="RStudio interface to R.", fig.margin = TRUE}
-knitr::include_graphics("01-visualization/images/rstudio.png")
-```
+If you can't get R and R Studio working on your computer, you may use [RStudio Cloud](https://rstudio.cloud) as a backup plan. Click on [this link]( https://rstudio.cloud/project/1486264) to go to a pre-created project which is already set up for you. You will need to sign up for a free account. You can go straight to the Tutorial section. You do not need to install anything. 
+
+Now, let's begin with getting familiar with RStudio. Begin by opening up RStudio. After you open RStudio, you should see three *panes*, or panels, dividing the screen: the *console pane*, the *files pane*, and the *environment pane*. Over the course of this chapter, you'll come to learn what purpose each of these panes serves. You should see something like this:
+
+`r include_graphics("00-shopping-week/images/rstudio.png")`
 
 ```{marginfigure}
 (Note that slight differences might exist from the figure if the RStudio interface is updated after 2019 to not be this by default.)
 ```
-
-After you open RStudio, you should see three *panes*, or panels, dividing the screen: the *console pane*, the *files pane*, and the *environment pane*. Over the course of this chapter, you'll come to learn what purpose each of these panes serves. 
-
-To start off, you'll need to download the necessary software:
-
-1. [R](https://www.r-project.org/)
-
-2. [RStudio](https://rstudio.com/)
-
-R is the programming language you'll be using in this class and RStudio is the IDE you'll be using. An IDE or Integrated development environment is an app that allows you to write code.
-
-Think of installing R like telling your computer to learn French and installing RStudio as the way you can communicate with your computer in French.
-
-If you can't get R and R Studio working on your computer, you may use [RStudio Cloud](https://rstudio.cloud) as a backup plan. Click on [this link]( https://rstudio.cloud/project/1486264) to go to a pre-created project which is already set up for you. You will need to sign up for a free account. You can go straight to the Tutorial section. You do not need to install anything. 
-
-Now, let's begin with getting familiar with RStudio. Begin by opening up RStudio. You should see something like this:
-
-`r include_graphics("00-shopping-week/images/rstudio.png")`
 
 This is your workspace! You can see three main windows right now. Let's focus on the big one on the left:
 
