@@ -242,7 +242,7 @@ Wrapping a function with `list()` is often how we will go about creating list co
 
 First, we load the necessary `PPBDS.data` library, select the relevant variables, and group by `block`. We are grouping because we are curious as to how the poverty rates look when aggregated by block, rather than as individual observations.
 
-```{r kenya_list_column}
+```{r}
 library(PPBDS.data)
 kenya %>%
   select(block, poverty) %>%
@@ -251,7 +251,7 @@ kenya %>%
 
 Next, we will create a list-column by wrapping `quantile()` with `list()`. `quantile()` naturally produces a numeric vector of the quantiles of `poverty`, and wrapping with `list()` will capture this numeric vector as a list.
 
-```{r kenya_list_column}
+```{r}
 library(PPBDS.data)
 kenya %>%
   select(block, poverty) %>%
@@ -261,7 +261,7 @@ kenya %>%
 
 Or let's say that we wanted 1) to subset the dataset to the those with `treatment == "control"`, 2) group by `block`, and 3) get a `summary()` of the `distance` variable by continent:
 
-```{r continent_summary}
+```{r}
 kenya %>%
   select(treatment, block, distance) %>%
   filter(treatment == "control") %>%
@@ -275,7 +275,7 @@ For this example, we will use the `nhanes` dataset from the `PPBDS.data` package
 
 First, let's wrangle the data so each observation is grouped by age and gender.  We'll create a list column `all_weights` that consists of every subject's weight, grouped by age and gender.
 
-```{r eval = FALSE, message=FALSE}
+```{r, eval = FALSE, message=FALSE}
 nhanes %>%
   group_by(age, gender) %>%
   summarize(all_weights = list(weight))
@@ -283,7 +283,7 @@ nhanes %>%
 
 Now that we have a list column, we can use it as the input to `map()`, outputting another list column.  Let's say we wanted a new list column, `log_weights`, which takes the logarithmic value of each weight observation.
 
-```{r eval = FALSE, message=FALSE}
+```{r, eval=FALSE, message=FALSE}
 nhanes %>%
   group_by(age, gender) %>%
   summarize(all_weights = list(weight)) %>%
@@ -294,7 +294,7 @@ Note that we took the list column `all_weights` and, by applying an anonymous fu
 
 If we try to replace the `map()` function in the last line with a simple `mutate()`, we will get an error.
 
-```{r echo=FALSE, error=TRUE}
+```{r, echo=FALSE, error=TRUE}
 nhanes %>%
   group_by(age, gender) %>%
   summarize(all_weights = list(weight)) %>%
@@ -305,7 +305,7 @@ Again, this is because the `mutate()` function is ill-equipped to handle lists. 
 
 You can also use `map_*` functions to take a list column as an input and return an atomic vector -- a column with a single value per observation -- as an output.  For instance, let's say we now wanted the mean of the log weights:
 
-```{r eval = FALSE, message=FALSE}
+```{r, eval=FALSE, message=FALSE}
 nhanes %>%
   group_by(age, gender) %>%
   summarize(all_weights = list(weight)) %>%
@@ -314,10 +314,9 @@ nhanes %>%
 ```
 
 Here, we also see that the `map_*` functions have the `...` argument, which allows `na.rm = TRUE` to be passed along to `mean()`.
-
 What if we wanted to extract the top five log weights per row?
 
-```{r top_5, eval = FALSE}
+```{r, eval=FALSE}
 nhanes %>%
   group_by(age, gender) %>%
   summarize(all_weights = list(weight)) %>%
@@ -344,14 +343,14 @@ You can call an anonymous function using a `~` operator and then using a `.` to 
 
 ```{r}
 tibble(old = c(3, 7, 2)) %>% 
-  mutate(new = map_dbl(start, ~ (. + 1)))
+  mutate(new = map_dbl(old, ~ (. + 1)))
 ```
 
 Note that the parentheses are not necessary. As long as everything after the `~` works as R code, the anonymous function should work, each time replace the `.` with the value of the `.x` variable --- which is `start` in this case --- with its value in that row.
 
 ```{r}
 tibble(old = c(3, 7, 2)) %>% 
-  mutate(new = map_dbl(start, ~ . + 1))
+  mutate(new = map_dbl(old, ~ . + 1))
 ```
 
 The `~ ` shorthand is very convenient once you get used to it.  Let's see it in an example. We'll use the `weather` dataset in the `nycflights13` package. Let's say that we want to return a list-column with all the recorded temperatures in a day in Celsius.
@@ -581,7 +580,7 @@ The tidyverse style guide has a very useful [chapter on how to construct error m
 
 Here's the function we've written as an introduction to built-in and custom functions:
 
-```{r end_func1}
+```{r}
 mmm2
 ```
 
@@ -623,7 +622,7 @@ add_dice <- function(n) {
 
 Congratulations! We have just generalized our function to take in any number of dice. But wait... is it really *any* value? Let's add in a few checks that make sure no weird inputs break our function.
 
-```{r add_dice}
+```{r}
 add_dice <- function(n) {
   stopifnot(is.numeric(n))
   sum(sample(1:6, n, replace = TRUE))
@@ -739,13 +738,12 @@ test_that('invalid args are detected', {
 
 No news is good news! Let's see what test failure would look like. Let's revert to a version of our function that does not check for a positive `n` value and test it. We can watch it fail.
 
-```{r end_func3}
+```{r}
 add_dice <- function(n = 2) {
   stopifnot(is.numeric(n))
   sum(sample(1:6, n, replace = TRUE))
 }
-
-show_failure(add_dice(-1))
+# show_failure(add_dice(-1))
 ```
 
 Similar to the advice to use assertions in data analytical scripts, I recommend you use unit tests to monitor the behavior of functions you (or others) will use often. If your tests cover the function's important behavior, then you can edit the internals freely. You'll rest easy in the knowledge that, if you broke anything important, the tests will fail and alert you to the problem. A function that is important enough for unit tests probably also belongs in a package, where there are obvious mechanisms for running the tests as part of overall package checks.
@@ -881,7 +879,7 @@ add_dice <- function(n = 1) {
 
 Next, we will create `roll_dice()`, which calls `add_dice(n = 2)` as many times as the user specifies. To do so, we will be combining the `rep()` function with `map_int()`.
 
-```{r roll_dice}
+```{r}
 roll_dice <- function(n = 1) {
   stopifnot(is.numeric(n))
   map_int(rep(2, n), add_dice)
@@ -894,7 +892,7 @@ roll_dice(5)
 
 Create a tibble named `x` with one variable: `throws`. `throws` is a list column, each element of which is three throws of the dice pair, i.e., the result of calling `roll_dice(n = 3)`.  Thus, our tibble will have ten rows and two columns.
 
-```{r throw_dice}
+```{r}
 x <- tibble(throws = map(rep(3, 10), roll_dice))
 x
 ```
