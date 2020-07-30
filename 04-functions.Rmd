@@ -333,7 +333,9 @@ See how we chained the `map_*` functions:
 
 Until now, we have practiced using map functions and built-in R functions such as `log()` and `sort()` to create list columns. Next, we will show you how to write your very own functions!
 
-## Anonymous Functions
+## Custom Functions
+
+### Anonymous functions with `map_*` functions
 
 We can create functions that do operations "on the fly" without bothering to give them a name. These nameless functions are called [anonymous functions.](https://coolbutuseless.github.io/2019/03/13/anonymous-functions-in-r-part-1/)
 
@@ -374,7 +376,7 @@ weather %>%
 
 That was an anonymous function! As you can see, anonymous functions used in a `map_*` function context cannot get too complex. The next section will teach you how to write your own custom functions with flexibility.
 
-## Custom Functions
+### Creating your own functions
 
 There are plenty of built-in functions in R, such as the ones mentioned above. You can also create your own custom functions, which may look something like this:
 
