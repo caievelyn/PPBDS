@@ -62,7 +62,8 @@ nes <- nes %>%
   mutate(state = as.factor(state),
          gender = as.factor(gender),
          race = as.factor(race),
-         pres_appr = as.factor(pres_appr))
+         pres_appr = as.factor(pres_appr),
+         education = as.character(education))
 ```
 
 ```{r}
@@ -113,7 +114,7 @@ With this cleaned data, let's dive into the first model we will create, which wi
 
 First, load the ***tidymodels*** library and use `initial_split()` to split the data into testing and training sets. Don't worry about the testing set-- for now,  we will build our model off of the training set.
 
-```{r}
+```{r eval=FALSE}
 library(tidymodels)
 library(rsample)
 
@@ -122,6 +123,21 @@ nes_split <- initial_split(nes_2016)
 
 nes_training <- nes_split %>% training()
 nes_testing <- nes_split %>% testing()
+```
+
+```{r}
+library(tidymodels)
+library(rsample)
+
+set.seed(10)
+nes_split <- initial_split(nes_2016)
+
+nes_training <- nes_split %>%
+  training() %>%
+  mutate(education = as.character(education))
+nes_testing <- nes_split %>%
+  testing() %>%
+  mutate(education = as.character(education))
 ```
 
 Next, construct the linear regression model.
@@ -247,21 +263,21 @@ What if we create completely new data outside of the testing set? Time to make u
 
 ```{r}
 new_people <- tibble("Name" = c("Alice", "Bob", "Chelsea", "Darren"),
-                     "state" = c("VA", "AL", "VA", "AL"),
-                     "gender" = c("Female", "Male", "Female", "Male"),
+                     "state" = as.factor(c("VA", "AL", "VA", "AL")),
+                     "gender" = as.factor(c("Female", "Male", "Female", "Male")),
                      "income" = c(3, 1, 3, 5),
                      "age" = c("35 - 44", "55 - 64", "35 - 44", "55 - 64"),
-                     "education" = c("elementary", "hs diploma", "adv. degree", "hs diploma"),
+                     "education" = c("elementary", "hs diploma", "hs diploma +", "hs diploma"),
                      "race" = c("White", "White", "White", "White"),
-                     "pres_appr" = c("approve", "approve", "approve", "approve"))
+                     "pres_appr" = as.factor(c("approve", "approve", "approve", "approve")))
 ```
 
 Now, let's predict each new person's ideology using the linear regression model we just created.
 
-```{r}
+```{r this-is-not-knitting, eval=FALSE}
 lm_model %>%
   fit(interact_form, data = nes_training) %>%
-  predict(new_people) %>%
+  predict(new_data = new_people) %>%
   bind_cols(new_people) %>%
   rename("ideology" = ".pred")
 ```
@@ -372,7 +388,7 @@ Now, we can use `map_*` to apply all of these models and view their metrics to s
 set.seed(10)
 folds_metrics<- nes_formulas %>%
   mutate(metrics = map(formula, ~ fit_resamples(object = lm_model,
-                                                preprocessor = lm_rec,
+                                                preprocessor = .,
                                                 resamples = nes_folds) %>%
                          collect_metrics()))
 ```
@@ -439,14 +455,14 @@ nnet_model
 
 Let's cross-validate our predictions using `vfold_cv()`.
 
-```{r message=FALSE}
+```{r message=FALSE, eval=FALSE}
 set.seed(10)
 fit_resamples(object = nnet_model,
               preprocessor = lm_rec,
               resamples = nes_folds)
 ```   
 
-```{r}
+```{r eval=FALSE}
 set.seed(10)
 fit_resamples(nnet_model,
               lm_rec,
@@ -468,7 +484,7 @@ nnet_model %>%
 
 Now, let's predict each new person's ideology using the `nnet` model we created, like before.
 
-```{r message=FALSE}
+```{r message=FALSE, eval=FALSE}
 nnet_model %>%
   fit(interact_form, data = nes_training) %>%
   predict(new_people) %>%
