@@ -6,8 +6,6 @@ output_yaml:
 # Continuous Response {#continuous-response}
 
 
-<!-- Use nes with ideology as the lefthand side variable? (Should we just do 2016?) Models to use: lm(), stan_glm(), gam() -->
-
 <!-- Overview: The main structure of the this chapter is three full scale linear modeling approaches to the same data set, where the response variable is continuous. (Maybe we have two data sets, and apply all three models to each one?) In each case, we use the tidymodels framework. I am not sure what the best dataset would be. I am not sure what the three approaches should be. Presumably lm() and stan_glm() would be included. Maybe gam() also. Or loess(). Or robust_lm(). Could be something fancier like svm(). Or neural network. -->
 
 
@@ -31,25 +29,11 @@ output_yaml:
 
 <!-- 6) Answer the questions we started with. -->
 
-
-<!-- EC: Chapter Organization
-Since Ch. 14 might be partially absorbed into this chapter, I'm wondering how to organize it.
-Concepts in this chapter are multivariate regression, interaction models, parallel slope models, model selection, 3D scatterplots & regression planes. Concepts in Ch 14 are using tidymodels, machine learning, and cross validation. Here's a rough outline;
-1. Multivariate regression and tidymodels
-2. Interaction models, parallel slope models, model selection
-3. 3D scatterplots & regression planes
-4. Introducing machine learning
-5. Using tidymodels for cross validation-->
-
-
-
 <!-- 2. Use a different model, like loess, to solve the exact same problem. Go through the same overview, but more quickly. Not everything will work. For example, there are no parameter estimates for loess, or at least none that are easily visible. -->
 
 <!-- 3. How do we decide? lm() or loess() or something? Incorporate (i.e., copy and paste) chapter 14 material. Don't do anything with tidymodel syntax. All that falls to chapter 11. But you are explaining every concept. -->
 
 <!-- In loess section, grab a copy of this xkcd and use it: https://xkcd.com/2048/ -->
-
-<!-- EC: Where is machine learning being introduced, if at all? -->
 
 In the last two chapters, we covered regressions and common pitfalls. This chapter will be all about applying these concepts using the `tidymodels` framework.
 
@@ -294,7 +278,7 @@ The mean squared error is about 1.64.
 
 What if we create completely new data outside of the testing set? Time to make up some imaginary people. Let's say we have four individuals whose ideology in 2016 we wanted to predict. We can create a tibble with the values of their demographic information, like so:
 
-<!-- EC: Do we want to include pres_appr? Is that a meaningful variable or is that too close to the outcome variable? -->
+<!-- Just because you have a variable in this training data today, does not mean you are going to get it in your production data tomorrow. -->
 
 ```{r}
 new_people <- tibble("Name" = c("Alice", "Bob", "Chelsea", "Darren"),
@@ -351,8 +335,6 @@ fit(stan_model, interact_form, nes_training) %>%
   tidy(conf.int = TRUE) %>%
   select(term, estimate, std.error)
 ```
-
-<!-- EC: Removed LOO. Add back in K-fold -->
 
 ### Verifying fit using cross-validation
 
@@ -478,8 +460,6 @@ lm_model %>%
 Discuss rmse value
 
 ## Using a neural network
-
-<!-- EC: Is this particular approach better suited for classification questions? (chapter 12) https://www.tidymodels.org/learn/models/parsnip-nnet/ -->
 
 Let's dive into the world of machine learning. Neural networks are useful for mimicking how humans make decisions. Thanks to the ***parsnip*** package, there are functions available that can fit regression models using neural networks.
 
