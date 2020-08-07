@@ -74,8 +74,7 @@ nes <- nes %>%
   mutate(state = as.factor(state),
          gender = as.factor(gender),
          race = as.factor(race),
-         pres_appr = as.factor(pres_appr),
-         education = as.character(education))
+         pres_appr = as.factor(pres_appr))
 skim(nes)
 ```
 
@@ -140,11 +139,9 @@ set.seed(10)
 nes_split <- initial_split(nes_2016)
 
 nes_training <- nes_split %>%
-  training() %>%
-  mutate(education = as.character(education))
+  training()
 nes_testing <- nes_split %>%
-  testing() %>%
-  mutate(education = as.character(education))
+  testing()
 ```
 
 Next, construct the linear regression model.
@@ -272,16 +269,16 @@ What if we create completely new data outside of the testing set? Time to make u
 new_people <- tibble("Name" = c("Alice", "Bob", "Chelsea", "Darren"),
                      "state" = as.factor(c("VA", "AL", "VA", "AL")),
                      "gender" = as.factor(c("Female", "Male", "Female", "Male")),
-                     "income" = c(3, 1, 3, 5),
+                     "income" = as.factor(c("34 - 67", "0 - 16", "34 - 67", "96 - 100")),
                      "age" = c("35 - 44", "55 - 64", "35 - 44", "55 - 64"),
-                     "education" = c("elementary", "hs diploma", "hs diploma +", "hs diploma"),
+                     "education" = c("Elementary", "Highschool", "Adv. Degree", "Highschool"),
                      "race" = c("White", "White", "White", "White"),
-                     "pres_appr" = as.factor(c("approve", "approve", "approve", "approve")))
+                     "pres_appr" = as.factor(c("Approve", "Approve", "Approve", "Approve")))
 ```
 
 Now, let's predict each new person's ideology using the linear regression model we just created.
 
-```{r this-is-not-knitting, eval=FALSE}
+```{r this-is-not-knitting, message=FALSE}
 lm_model %>%
   fit(interact_form, data = nes_training) %>%
   predict(new_data = new_people) %>%
