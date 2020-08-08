@@ -353,7 +353,8 @@ Let's practice K-Fold validation with the `stan` model.
 set.seed(10)
 fit_resamples(object = stan_model,
               preprocessor = recipe(demo_form, ch11_training),
-              resamples = ch11_folds)
+              resamples = ch11_folds) %>%
+  collect_metrics()
 ```   
 
 
