@@ -233,14 +233,15 @@ Recipes are what ***tidymodels*** use in lieu of defining a formula traditionall
 There are a number of useful functions that can be piped into recipes. One particularly useful family of functions is the family of step functions. These functions conduct a variety of transformations, from removing variables with high correlations to other variables (`step_corr()`) to adding in an interaction term (`step_interact()`). To learn more about recipes, you can visit the [Tidymodels website.](https://recipes.tidymodels.org/reference/index.html)
 ```
 
-Usually, a simple formula without interaction terms can be plugged right in to `fit_resamples()`. However, ***tidymodels*** does not allow in-line functions in recipes, meaning we need to use a `step_*` function to add the interaction terms. Let's create our recipe.
+Usually, a simple formula without interaction terms can be plugged right in to `fit_resamples()`. However, ***tidymodels*** does not allow in-line functions in recipes, meaning we need to use a `step_*` function to add the interaction terms. 
 
-```{r}
+Let's create our recipe. First, we define a formula without interaction terms. Then, using `step_interact()`, we add in the relevant interaction terms. We need to convert all of the nominal variables, which are unordered character values, to dummy variables. Dummy variables are binary variables that are 1 when the categorical event occurs and 0 when it does not occur. For example, each level within `education` would be converted into its own variable, with the value 1 if the respondent had that level of education, and 0 otherwise.
+
+```{r message=FALSE, warning=FALSE}
 lm_rec <- recipe(ideology ~ gender + race + state + income + age + education, data = ch11_training) %>%
-  step_interact(terms = ~ gender:race + state:income)
+  step_interact(terms = ~ gender*race + state*income) %>%
+  step_dummy(all_nominal())
 ```
-
-<!-- EC: Adding interaction terms seems to complicate fit_resamples. -->
 
 Finally, the `resamples` argument is where you input the cross-validation dataset.
 
@@ -281,7 +282,7 @@ lm_model %>%
   rmse(truth = ideology, estimate = .pred)
 ```
 
-The mean squared error is about 1.64.
+The mean squared error is about 2.14.
 
 What if we create completely new data outside of the testing set? Time to make up some imaginary people. Let's say we have four individuals whose ideology in 2016 we wanted to predict. We can create a tibble with the values of their demographic information, like so:
 
@@ -299,7 +300,7 @@ new_people <- tibble("Name" = c("Alice", "Bob", "Chelsea", "Darren"),
 
 Now, let's predict each new person's ideology using the linear regression model we just created.
 
-```{r this-is-not-knitting, message=FALSE}
+```{r message=FALSE}
 lm_model %>%
   fit(interact_form, data = ch11_training) %>%
   predict(new_data = new_people) %>%
@@ -335,9 +336,11 @@ stan_model <-
 
 Next, let's fit this model using the formula we specified before. We can select for the relevant terms after using `tidy()` to make our tibble viewable.
 
+<!-- EC: It seems like stan_glm just blows up. We can use algorithm = "optimizing" to make it go faster, but that doesn't play nice with tidymodels. -->
+
 ```{r message=FALSE, warning=FALSE, eval=FALSE}
 set.seed(10)
-fit(stan_model, interact_form, ch11_training) %>%
+fit(stan_model, demo_form, ch11_training) %>%
   tidy(conf.int = TRUE) %>%
   select(term, estimate, std.error)
 ```
@@ -349,7 +352,7 @@ Let's practice K-Fold validation with the `stan` model.
 ```{r cache=TRUE, eval=FALSE}
 set.seed(10)
 fit_resamples(object = stan_model,
-              preprocessor = lm_rec,
+              preprocessor = recipe(demo_form, ch11_training),
               resamples = ch11_folds)
 ```   
 
@@ -374,49 +377,47 @@ stan_model %>%
 
 What if we created a bunch of different formulas that used different permutations of predictor variables? For example, one would exclude `state`, which has 50 different levels.
 
-First, let's create a basic formula that only takes in `pres_appr`.
+First, let's create a basic formula that only takes in `race`.
 
 ```{r}
-basic_form <- formula(ideology ~ pres_appr)
+race_form <- formula(ideology ~ race)
 ```
 
 Next, we can use `update()` to create the more complicated formulas.  `update()` takes as its first argument a formula and as its second argument the additions you want to make.  To keep all the predictors from the first formula and add more, you will start with `~ . + ` and then add more predictors, like so:
 
 ```{r}
-race_gender_form <- update(basic_form,
-                    ~ . + race + gender)
+race_gender_form <- update(race_form,
+                    ~ . + gender + race:gender)
 
-demo_form <- formula(ideology ~ age + gender + race + income)
+demo_form <- formula(ideology ~ race + gender + income + age + education)
 
-non_state_form <- update(demo_form,
-                         ~ . + education + pres_appr)
-
-full_form <- update(non_state_form,
+full_form <- update(demo_form,
                    ~ . + state)
+
+interact_form <- update(race_gender_form,
+                        ~ . + income*age + education)
 ```
 
 Next, we will save these different formulas, along with the original `interact_form`, in a tibble to easily remember and recall the formulas.
 
 ```{r}
-nes_formulas <- tibble(formula = c(basic_form,
+ch11_formulas <- tibble(formula = c(race_form,
                                    race_gender_form,
                                    demo_form,
-                                   non_state_form,
                                    full_form,
                                    interact_form),
-                       group = c("Presidential approval model",
+                       group = c("Race only model",
                                  "Race and gender model",
                                  "Demographic model",
-                                 "Full model without state",
-                                 "Full model",
-                                 "Interaction model"))
+                                 "Full model without interaction",
+                                 "Sensible interaction model"))
 ```
 
 Now, we can use `map_*` to apply all of these models and view their metrics to see which ones have the lowest rmse values.
 
-```{r cache=TRUE}
+```{r cache=TRUE, warning=FALSE}
 set.seed(10)
-folds_metrics<- nes_formulas %>%
+folds_metrics<- ch11_formulas %>%
   mutate(metrics = map(formula, ~ fit_resamples(object = lm_model,
                                                 preprocessor = .,
                                                 resamples = ch11_folds) %>%
@@ -432,7 +433,7 @@ folds_metrics %>%
   select(group, mean_rmse, se_rmse)
 ```
 
-Looking at the results, it seems like `pres_appr` is a good predictor variable to incorporate, as the rmse for `basic_form` is much lower than that of the Demographic model, which does not include `pres_appr`. This makes sense, as how you lean ideologically is very likely correlated with how you feel about the President.
+Looking at the results, it seems like `pres_appr` is a good predictor variable to incorporate, as the rmse for `race_form` is much lower than that of the Demographic model, which does not include `pres_appr`. This makes sense, as how you lean ideologically is very likely correlated with how you feel about the President.
 
 The models with the lowest rmse values seem to be the Full model excluding state, which includes:
 
