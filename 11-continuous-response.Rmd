@@ -245,7 +245,6 @@ lm_rec <- recipe(ideology ~ gender + race + state + income + age + education, da
 
 Finally, the `resamples` argument is where you input the cross-validation dataset.
 
-<!-- EC: Not sure why fold 2 is getting an error but the other folds are not. -->
 
 ```{r}
 set.seed(10)
@@ -352,9 +351,8 @@ Let's practice K-Fold validation with the `stan` model.
 ```{r cache=TRUE, eval=FALSE}
 set.seed(10)
 fit_resamples(object = stan_model,
-              preprocessor = recipe(demo_form, ch11_training),
-              resamples = ch11_folds) %>%
-  collect_metrics()
+              preprocessor = lm_rec,
+              resamples = ch11_folds)
 ```   
 
 
