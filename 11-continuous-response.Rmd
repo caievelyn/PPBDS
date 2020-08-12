@@ -362,17 +362,14 @@ stan_model <-
     set_mode("regression")
 ```
 
-Next, let's fit this model using the formula we specified before. We can select for the relevant terms after using `tidy()` to make our tibble viewable.
+Next, let's fit this model using the formula we specified before. We can select for the relevant terms after using `tidy()` to make our tibble viewable. Remember that this is `broom.mixed::tidy()`, not `broom::tidy()`.
 
 ```{r message=FALSE, warning=FALSE}
 set.seed(10)
-fit(stan_model, full_form, ch11_training)
-
-  # tidy() %>% broom.mixed
-  # select(term, estimate, std.error)
+fit(stan_model, full_form, ch11_training) %>%
+  tidy(conf.int = TRUE) %>%
+  select(term, estimate, std.error)
 ```
-
-
 
 ### Verifying fit using cross-validation
 
