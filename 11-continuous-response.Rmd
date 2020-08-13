@@ -43,7 +43,7 @@ Wouldn't it be interesting to predict `ideology` based off of other variables? T
 
 ## Exploratory Data Analysis
 
-Load the libraries needed for this chapter. You might notice that ***tidymodels*** and ***rsample*** are new. The ***tidymodels*** framework makes it easy to use functions from various different packages in constructing, fitting, and testing models. Similarly, the ***rsample**** package allows for machine learning by splitting the data into training and testing sets.
+Load the libraries needed for this chapter. You might notice that ***tidymodels*** and ***rsample*** are new. The ***tidymodels*** framework makes it easy to use functions from various different packages in constructing, fitting, and testing models. Similarly, the ***rsample*** package allows for machine learning by splitting the data into training and testing sets.
 
 ```{r message=FALSE}
 library(PPBDS.data)
@@ -55,7 +55,7 @@ library(broom.mixed)
 library(rstanarm)
 ```
 
-Now that we have loaded ****PPBDS.data***, let's `glimpse()` the dataset.
+Now that we have loaded ***PPBDS.data***, let's `glimpse()` the dataset.
 
 ```{r}
 glimpse(nes)
