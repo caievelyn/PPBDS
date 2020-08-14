@@ -136,7 +136,7 @@ Now that we have a left-hand variable to estimate with reasonable predictors, le
 
 It is important to note that **there are an infinite number of comparisons you can make**. Because our model is predictive, we can only say something about the population if one variable is tweaked and all else is kept the same. For example, we could look at how education affects the self-reported ideology of Asian respondents compared to Black respondents, given that both groups of respondents are well-educated, female, middle-aged, and reside in the Northeast. Or, we could look at the interaction between gender and race and its affect on ideology for certain values of the other variables. There is no right answer as to what question is the best one to answer. Indeed, this is another important choice you will have to make as a data scientist.
 
-For this chapter, we will seek to answer the following question: How does age affect ideology for residents of the four different regions of the U.S.?
+For this chapter, we will seek to answer the following question: How does age affect ideology for residents of the Northeast vs. the South of the U.S.?
 
 ### Justice
 
